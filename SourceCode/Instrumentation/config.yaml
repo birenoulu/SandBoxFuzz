@@ -1,0 +1,199 @@
+homePath: /home/admin/yujiazhao.yjz/internal_release/igtransferprod/
+externalLibrariesDir: /home/admin/.m2/repository
+tmpSootOutputDir: /tmp/soot-output/
+
+# seeds:
+#   initSeed: 5092914270141385744
+
+#  printed log message mode
+#  level:
+#  - block: per basic block
+#    mode:
+#    - hash: (class, method) + hashcode
+#    - sign: (class, method) + block_id + stmt_id
+#    - fuzz: (class, method) + hashcode + block_id + stmt_id, if use fuzzing, please select this format
+#  - stmt: per stmt (more fine-grained than block)
+#    mode:
+#    - hash: (class, method) + hashcode
+#    - sign: (class, method) + stmt_id
+#  - method: per method
+#    mode:
+#    - sign: (class, method)
+#  - none: don't do any instrument
+logLevel: block
+logMode: fuzz
+
+# soot's output format
+# class: .class
+# jimple: .jimple
+# none: no output file
+outputFormat: class
+
+# if File set as false, won't create a log file, output will show on std output
+sootLog:
+  logFile: true
+  transformInfo: false
+  summaryInfo: true
+  hashMapInfo: true
+
+# what methods to be showed in transformInfo
+# only valid if transformInfo is true
+# this should be a list
+#transformFilter:
+#  -
+
+targetPaths:
+  - name: biz-event
+    dir: app/biz/event/target/
+    tar: igtransferprod-biz-event-1.0.0-SNAPSHOT.jar
+  - name: biz-front
+    dir: app/biz/front/target/
+    tar: igtransferprod-biz-front-1.0.0-SNAPSHOT.jar
+  - name: biz-fund
+    dir: app/biz/fund/target/
+    tar: igtransferprod-biz-fund-1.0.0-SNAPSHOT.jar
+  - name: biz-service-impl
+    dir: app/biz/service-impl/target/
+    tar: igtransferprod-biz-service-impl-1.0.0-SNAPSHOT.jar
+  - name: biz-shared
+    dir: app/biz/shared/target/
+    tar: igtransferprod-biz-shared-1.0.0-SNAPSHOT.jar
+  - name: biz-tuition
+    dir: app/biz/tuition/target/
+    tar: igtransferprod-biz-tuition-1.0.0-SNAPSHOT.jar
+  - name: common-dal
+    dir: app/common/dal/target/
+    tar: igtransferprod-common-dal-1.0.0-SNAPSHOT.jar
+  - name: common-service-facade
+    dir: app/common/service/facade/target/
+    tar: igtransferprod-common-service-facade-1.0.0.20240516.jar
+  - name: common-service-integration
+    dir: app/common/service/integration/target/
+    tar: igtransferprod-common-service-integration-1.0.0-SNAPSHOT.jar
+  - name: common-util
+    dir: app/common/util/target/
+    tar: igtransferprod-common-util-1.0.0-SNAPSHOT.jar
+  - name: core-apivalidate
+    dir: app/core/apivalidate/target/
+    tar: igtransferprod-core-apivalidate-1.0.0-SNAPSHOT.jar
+  - name: core-model
+    dir: app/core/model/target/
+    tar: igtransferprod-core-model-1.0.0-SNAPSHOT.jar
+  - name: core-router
+    dir: app/core/router/target/
+    tar: igtransferprod-core-router-1.0.0-SNAPSHOT.jar
+  - name: core-service
+    dir: app/core/service/target/
+    tar: igtransferprod-core-service-1.0.0-SNAPSHOT.jar
+  - name: biz-router
+    dir: app/router/router-parent/target/
+    tar: igtransferprod-biz-router-1.0.0-SNAPSHOT.jar
+
+# which target module not to be instrumented
+ignoreModules:
+  - biz-event
+  - biz-front
+  - biz-fund
+  - biz-service-impl
+  - biz-shared
+  - biz-tuition
+  - biz-router
+
+otherModulePaths:
+  - app/test/target/test-classes/
+
+jrePaths:
+  - /opt/taobao/java/jre/lib/charsets.jar
+  - /opt/taobao/java/jre/lib/ext/cldrdata.jar
+  - /opt/taobao/java/jre/lib/ext/dnsns.jar
+  - /opt/taobao/java/jre/lib/ext/jaccess.jar
+  - /opt/taobao/java/jre/lib/jce.jar
+  - /opt/taobao/java/jre/lib/jfr.jar
+  - /opt/taobao/java/jre/lib/jsse.jar
+  - /opt/taobao/java/jre/lib/ext/localedata.jar
+  - /opt/taobao/java/jre/lib/management-agent.jar
+  - /opt/taobao/java/jre/lib/ext/nashorn.jar
+  - /opt/taobao/java/jre/lib/resources.jar
+  - /opt/taobao/java/jre/lib/rt.jar
+  - /opt/taobao/java/jre/lib/ext/sunec.jar
+  - /opt/taobao/java/jre/lib/ext/sunjce_provider.jar
+  - /opt/taobao/java/jre/lib/ext/sunpkcs11.jar
+  - /opt/taobao/java/jre/lib/ext/zipfs.jar
+
+#methodList:
+##  - name: bootstrap$
+##    ignore: true
+##    counts: 3577
+##    comments: lambda init, exists when model-lambdametafactory is on
+##  - name: apply
+##    ignore: false
+##    counts: 2414
+##    comments: method of lambda, exists when model-lambdametafactory is on
+##  - name: accept
+##    ignore: false
+##    counts: 658
+##    comments: method of lambda, exists when model-lambdametafactory is on
+#  - name: execute
+#    ignore: false
+#    counts: 629
+#    comments: method of lambda
+#  - name: toString
+#    ignore: true
+#    counts: 422
+#    comments:
+##  - name: test
+##    ignore: false
+##    counts: 401
+##    comments: method of lambda, exists when model-lambdametafactory is on
+#  - name: process
+#    ignore: false
+#    counts: 381
+#    comments: handler process
+#  - name: valueOf
+#    ignore: true
+#    counts: 213
+#    comments:
+#  - name: values
+#    ignore: true
+#    counts: 213
+#    comments:
+#  - name: getSalResultCode
+#    ignore: false
+#    counts: 197
+#    comments: too simple
+#  - name: equals
+#    ignore: true
+#    counts: 153
+#    comments:
+#  - name: hashCode
+#    ignore: true
+#    counts: 151
+#    comments:
+#  - name: canEqual
+#    ignore: true
+#    counts: 150
+#    comments:
+#  - name: getMerchantId
+#    ignore: false
+#    counts: 123
+#    comments:
+#  - name: setMerchantId
+#    ignore: false
+#    counts: 121
+#    comments:
+#  - name: decideRoutingMode
+#    ignore: false
+#    counts: 113
+#    comments:
+#  - name: access$000
+#    ignore: false
+#    counts: 101
+#    comments: access outer private fields
+#  #  - name: get
+#  #    ignore: false
+#  #    counts: 100
+#  #    comments:
+#  - name: getCode
+#    ignore: false
+#    counts: 81
+#    comments:

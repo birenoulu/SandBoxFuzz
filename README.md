@@ -120,12 +120,11 @@ python yaml_generation.py
 The result will be written in txt files.
 
 #### b. How to excute SandBoxFuzz
-Comaring with FatFuzz, SandBoxFuzz is easy to run, which saves substantial manual works.
-```
-cd instrumentation/
-sh backup.sh
-sh replace.sh
-cd ../
+Comaring with FatFuzz, SandBoxFuzz is easy to run, which saves substantial manual works.  
+1. Setting the parameter value in **configuration.properties**.  
+2. Deploying a local Redis instance
+3. Using Maven Package to create a Jar file with GeometricSample.java, RedisUtil.java, MutationUtil.java and YamlUtil.java
+4. Placing Jar file, TestController.java and MutationUtil.java in the same directory
+5. Run command to run SandBoxFuzz
 
-```
 

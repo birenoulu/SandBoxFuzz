@@ -44,6 +44,19 @@ If the coverage of the overall hash table is about 30-60%, it is appropriate. Yo
 
 **METHOD_SHIFT_TO_BLOCK, CLASS_SHIFT_TO_BLOCK**: Corresponding to the above three fields, this indicates how many bits of method to block and class to block are offset, that is, METHOD_SHIFT_TO_BLOCK = MAX_BLOCK_ NUM, CLASS_SHIFT_TO_BLOCK = MAX_METHOD_NUM + MAX_BLOCK_NUM, while 32-CL ASS_SHIFT_TO_BLOCK = MAX_CLASS_NUM.
 
+###### _**Run Instrumentation**_:
+1. Make sure the LogInstrumentorJar.java is configured correctly.
+2. Placing soot-4.6.0-with-dependencies.jar, snakeyaml-2.0.jar and LogInstrumentorJar.java in the same directory.
+3. Run command to compile and run the Instrumentation
+```
+javac -g -cp .:soot-4.6.0-with-dependencies.jar:snakeyaml-2.0.jar LogInstrumentorJar.java
+java -cp .:soot-4.6.0-with-dependencies.jar:snakeyaml-2.0.jar LogInstrumentorJar all
+```
+
+###### _**Prepare init-seeds**_:
+For different entry methods, the init-seeds are different. Although most of entry methods have init-seeds but a slight modification is still needed.  
+For instance, test cases ID must match in data.yaml, logic.yaml, request.yaml and mock.yaml. It's easy to change and only taks a few minutes.
+
 ### B. Execute Fuzzer  
 FatFuzz and SandBoxFuzz have the different method to execute, we will intruduce them respectively.  
 #### a. How to excute FatFuzz  
@@ -65,12 +78,6 @@ currencyValue = [
  "344",
  ...
 ]
-IgtpCommonResultCode = [
- "SUCCESS",
- "UNKNOWN_EXCEPTION",
- "PARAM_ILLEGAL",
- ...
-]
 ...
 ```
 
@@ -89,18 +96,6 @@ field_list = {
  "datatype": "int",
  "extend": {}
  },
- "#request_IgtpQueryQuoteRequest# payerAgentId": {
- "name": "payerAgentId",
- "type": "all",
- "datatype": "string",
- "extend": {}
- },
- "#IfxQuoteClientMock# cent": {
- "name": "cent",
- "type": "skip",
- "datatype": "enum",
- "extend": enums.centRange
- },
 ...
 }
 
@@ -110,25 +105,47 @@ In addition, any mistakes will affect the FatFuzz execution failed.
 
 After that we can run command in console to execute FatFuzz
 ```
-cd instrumentation/
-sh backup.sh
-sh replace.sh
-cd ../
-cd fuzzing/
 python yaml_generation.py
 ```
 The result will be written in txt files.
 
 #### b. How to excute SandBoxFuzz
 Comaring with FatFuzz, SandBoxFuzz is easy to run, which saves substantial manual works.  
-1. Setting the parameter value in **configuration.properties**.
-2. Upload JVM-SandBox to workspace
-3. Using Maven Install command to create a Jar file with GeometricSample.java, RedisUtil.java, MutationUtil.java, YamlUtil.java and SandBoxFuzz.java
-4. Placing Jar into sandbox\module
+In this readme, let's take an entry method as an example and describe the process. And we will mask the secret information in Ant Group as '***'.
+1. Setting the parameter value in **configuration.properties**, the most important is maven command which contain many parameters which depend on different entry methods
+```
+maven_command=mvn test -DskipTests=false -Dsurefire.useFile=false -Dmaven.test.skip=false -Djacoco.skip=true -DtestPhrase=install -DmachineEncoding=UTF8  -DtimeZone=USA -Ddbmode=dev -Dcom.alipay.ldc.zone=SGGZ00B -Dzomde=false -Dcom.alipay.confreg.url=*****.*****.alipay.net -Ddrm_enabled=false -Ditest.sandbox_test_mode=check -javaagent:/home/admin/abc.abc/internal_release/*****/sandbox/lib/sandbox-agent.jar
+```
+2. Upload JVM-SandBox.zip to workspace and extract the zip
+3. Using Maven Install command to create a sandbox-agent.jar file with TestCase.java GeometricSample.java, RedisUtil.java, MutationUtil.java, YamlUtil.java and SandBoxFuzz.java
+4. Placing sandbox-agent.jar into sandbox\module
 5. Combine JVM-Sandbox by adding path in pom.xml
-6. Deploying a local Redis instance and ensure the port is matching with code
-7. Placing TestController.java, YamlUtil.java, RedisUtil.java, configuration.properties, LogFilter.py, MutationUtil.java in the same directory
-8. Change the name of start.txt to start.sh
-9. Run the replace.sh to do the instrumentation
-10. Open the start.sh and run the first command to compile the SandBoxFuzz
-11. Open the start.sh and run the second command to run the SandBoxFuzz
+```
+-javaagent:/home/admin/abc.abc/internal_release/*****/sandbox/lib/sandbox-agent.jar
+```
+6. Deploying a local Redis instance and ensure the port is matching with code, which is 6379
+7. Placing SandBoxFuzz source code and some external dependency jar files in the same directory
+```
+--- Source Code ---
+config.properties
+GeometricSample.java
+MutationUtil.java
+RedisUtil.java
+SandBoxFuzz.java
+start_test.txt
+TestCase.java
+TestController.java
+YamlUtil.java
+--- External Dependency Jar ---
+fastjson-1.2.23.jar
+jedis-2.9.3.jar
+kryo-3.0.3.jar
+lombok-1.18.28.jar
+minlog-1.3.0.jar
+objenesis-2.1.jar
+reflectasm-1.11.9.jar
+snakeyaml-2.0.jar
+```
+8. Change the name of start_test.txt to start_test.sh
+9. Open the start.sh and run the first command to compile the SandBoxFuzz
+10. Open the start.sh and run the second command to run the SandBoxFuzz

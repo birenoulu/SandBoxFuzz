@@ -59,7 +59,7 @@ For instance, test cases ID must match in data.yaml, logic.yaml, request.yaml an
 
 ### B. Execute Fuzzer  
 FatFuzz and SandBoxFuzz have the different method to execute, we will intruduce them respectively.  
-#### a. How to excute FatFuzz  
+#### a. How to execute FatFuzz  
 FatFuzz needs to much manual efforts on preparation to write two extra files to suppot FatFuzz execution.
 
 The first one is **enums.py**, In this file, the range of all enum types is given as a list, and the values are strings. 
@@ -109,7 +109,7 @@ python yaml_generation.py
 ```
 The result will be written in txt files.
 
-#### b. How to excute SandBoxFuzz
+#### b. How to execute SandBoxFuzz
 Comaring with FatFuzz, SandBoxFuzz is easy to run, which saves substantial manual works.  
 In this readme, let's take an entry method as an example and describe the process. And we will mask the secret information in Ant Group as '***'.
 1. Setting the parameter value in **configuration.properties**, the most important is maven command which contain many parameters which depend on different entry methods

@@ -21,6 +21,7 @@ This file is the configuration file of LogInstrumentorJar.java. The following de
 **methodList**: Optionally, a list of methods that should not be inserted into the log statement.This can be used to mask constructors, static constructors, static blocks, lambda expressions, toString, hashCode, and other simple methods when needed, specifying the name property and ignore as true. Don't write if you don't need to.
 
 ###### _**LogInstrumentorJar.java**_:
+This is the configuration file for instrumentation. We do instrumentation using a open-source tool [**Soot**](https://github.com/noidsirius/android-soot-instrumentor).  
 To convert the bytecode source file, the parts that may need to be changed are as follows:  
 ```
 // size
@@ -63,7 +64,7 @@ FatFuzz and SandBoxFuzz have the different method to execute, we will intruduce 
 FatFuzz needs to much manual efforts on preparation to write two extra files to suppot FatFuzz execution.
 
 The first one is **enums.py**, In this file, the range of all enum types is given as a list, and the values are strings. 
-enum ranges are usually obtained from the type of the field 
+enum ranges are usually obtained from the type of the field
 (i.e., from the name of the field, it is usually either enum or string, or the field type is enum. Then look for the code converted to enum under the same class, tracing back to the enum definition, and get the scope from).  
 ```
 currency = [
@@ -100,9 +101,9 @@ field_list = {
 }
 
 ```
-That's a very complex file, which need to near 1 hour to prepare.
-In addition, any mistakes will affect the FatFuzz execution failed.
-
+There are very complex files, which need to near 1 hour to prepare. Any mistakes will affect the FatFuzz execution failed. Because these two files are used in the process of test case mutation.  
+**enums.py** list the range of all enum types. When enum type data is mutated, FatFuzz will search enums.py as mutation guidance.  
+**mutation.py** list the data type and range of all parameters in entry method test case. When FatFuzz load the test case parameters, FatFuzz will search mutation.py to confirm data type of parameter and mutation strategy.  
 After that we can run command in console to execute FatFuzz
 ```
 python yaml_generation.py
@@ -112,7 +113,7 @@ The result will be written in txt files.
 #### b. How to execute SandBoxFuzz
 Comaring with FatFuzz, SandBoxFuzz is easy to run, which saves substantial manual works.  
 In this readme, let's take an entry method as an example and describe the process. And we will mask the secret information in Ant Group as '***'.
-1. Setting the parameter value in **configuration.properties**, the most important is maven command which contain many parameters which depend on different entry methods
+1. Setting the parameter values in **configuration.properties**, which is the configuration file to run SandBoxFuzz, the most important is maven command which contain many parameters which depend on different entry methods
 ```
 maven_command=mvn test -DskipTests=false -Dsurefire.useFile=false -Dmaven.test.skip=false -Djacoco.skip=true -DtestPhrase=install -DmachineEncoding=UTF8  -DtimeZone=USA -Ddbmode=dev -Dcom.alipay.ldc.zone=SGGZ00B -Dzomde=false -Dcom.alipay.confreg.url=*****.*****.alipay.net -Ddrm_enabled=false -Ditest.sandbox_test_mode=check -javaagent:/home/admin/abc.abc/internal_release/*****/sandbox/lib/sandbox-agent.jar
 ```

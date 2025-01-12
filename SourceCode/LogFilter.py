@@ -88,8 +88,9 @@ class LogFilter():
                               self.logics}
 
         # re patterns
-        self.sofa_boot_start_pattern = re.compile(r'^(\d{2}:\d{2}:\d{2})[:,.]\d{3}.*服务器开始部署业务系统')
-        self.sofa_boot_done_pattern = re.compile(r'^(\d{2}:\d{2}:\d{2})[:,.]\d{3}.*构建测试用例集')
+        # value in these patterns should be replaced with actual output of the test framework
+        self.sofa_boot_start_pattern = re.compile(r'^(\d{2}:\d{2}:\d{2})[:,.]\d{3}.*SOFABOOT_START')
+        self.sofa_boot_done_pattern = re.compile(r'^(\d{2}:\d{2}:\d{2})[:,.]\d{3}.*SOFABOOT_DONE')
         self.itest_test_case_start_pattern = re.compile(r'\[NM_H_(\w+)_DATA_(\d+)\].*\[test begin\]')
         self.itest_test_case_end_pattern = re.compile(r'\[NM_H_(\w+)_DATA_(\d+)\].*\[upload log\]')
         self.itest_test_case_exec_start_pattern = re.compile(r'\[NM_H_(\w+)_DATA_(\d+)\].*result=ccbean')

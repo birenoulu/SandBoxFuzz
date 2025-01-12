@@ -50,7 +50,7 @@ public class SandBoxFuzz implements Module, ModuleLifecycle {
         // Set up mock-related watches
         SandBoxFuzz_mock();
         // Set up request-related watches
-        SandBoxFuzz_request2();
+        SandBoxFuzz_request();
     }
 
     @Override
@@ -245,8 +245,8 @@ public class SandBoxFuzz implements Module, ModuleLifecycle {
                 });
     }
 
-    @Command("SandBoxFuzz_request2")
-    public void SandBoxFuzz_request2() {
+    @Command("SandBoxFuzz_request")
+    public void SandBoxFuzz_request() {
         // Watch for method calls in specified class and behavior
         new EventWatchBuilder(moduleEventWatcher)
                 .onClass("*********************.class2") // Class name masked for security

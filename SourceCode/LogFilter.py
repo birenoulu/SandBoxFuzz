@@ -125,7 +125,9 @@ class LogFilter():
             "java.lang.SecurityException",
             "java.lang.StringIndexOutOfBoundsException",
             "java.lang.TypeNotPresentException",
-            "java.lang.UnsupportedOperationException"
+            "java.lang.UnsupportedOperationException",
+            "java.io.IOException",
+            "java.sql.SQLException"
         ]
         self.error_list = [
             "java.lang.Error",
